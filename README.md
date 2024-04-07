@@ -1,5 +1,10 @@
 ## Software Testing Homework 6 test application
 
+This is the work of:
+C14544 Ralf Animägi ralfanimagi@gmail.com
+B911205 Elisabet Hein elisabet.hein@ut.ee
+
+
 This is the testing repository for an online store application provided in the Software Testing course. The tests can be found in the test folder and it tests the following functionalities:
 
 ● As an admin you can:
