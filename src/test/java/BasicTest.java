@@ -118,5 +118,10 @@ public class BasicTest extends TestHelper {
         addProductshelp("Test Product 8", "Test Description", "Books", "10000000");
         assertTrue(findProduct("Test Product 8"));
     }
-    
+    // End User tests
+    @Test
+    public void addProductsToCart(){
+        addToCart("B45593 Sunglasses");
+        assertTrue(isElementPresent(By.id("checkout_button")));
+    }
 }

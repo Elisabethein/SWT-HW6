@@ -28,7 +28,7 @@ public class TestHelper {
     public void setUp(){
 
         // if you use Chrome:
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\elisabeh\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "D:\\Downloads\\chromedriver-win64 (1)\\chromedriver-win64\\chromedriver.exe");
         driver = new ChromeDriver();
 
         // if you use Firefox:
@@ -74,6 +74,7 @@ public class TestHelper {
 
         driver.findElement(loginButtonXpath).click();
     }
+
     void register(String username, String password){
         driver.get(baseUrlAdmin);
 
@@ -93,6 +94,7 @@ public class TestHelper {
         logout.click();
         waitForElementById("Admin");
     }
+
     void deleteAccount(String username){
         driver.get(baseUrlUsers);
         WebElement deleteBody = driver.findElement(By.tagName("tbody"));
@@ -119,6 +121,7 @@ public class TestHelper {
         driver.findElement(By.id("product_price")).sendKeys(price);
         driver.findElement(By.name("commit")).click();
     }
+
     void editProducthelp(String title, String newTitle, String newDescription, String newType, String newPrice){
         driver.get(baseUrlProducts);
         WebElement row = driver.findElement(By.xpath("//tr[td/a[text()='" + title + "']]"));
@@ -143,6 +146,13 @@ public class TestHelper {
     boolean findProduct(String title){
         driver.get(baseUrlProducts);
         return isElementPresent(By.linkText(title));
+    }
+
+    void addToCart(String title){
+        driver.get(baseUrl);
+        WebElement div = driver.findElement(By.id(title + "_entry"));
+        WebElement form = div.findElement(By.className("button_to"));
+        form.submit();
     }
 
 
