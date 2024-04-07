@@ -14,31 +14,20 @@ public class TestHelper {
 
     static WebDriver driver;
     final int waitForResposeTime = 4;
-
-    // here write a link to your admin website (e.g. http://my-app.herokuapp.com/admin)
     String baseUrlAdmin = "http://127.0.0.1:3000/admin";
     String baseUrlUsers = "http://127.0.0.1:3000/users";
     String baseUrlProducts = "http://127.0.0.1:3000/products";
-
-    String orderUrl = "http://127.0.0.1:3000/orderd/new?";
     String baseUrl = "http://127.0.0.1:3000/";
 
     @Before
     public void setUp() {
-
-        // if you use Chrome:
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\elisabeh\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
         driver = new ChromeDriver();
-
-        // if you use Firefox:
-        //System.setProperty("webdriver.gecko.driver", "C:\\Users\\...\\geckodriver.exe");
-        //driver = new FirefoxDriver();
-
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get(baseUrl);
-
     }
 
+    // Method to go to a page
     void goToPage(String page) {
         WebElement elem = driver.findElement(By.linkText(page));
         elem.click();
@@ -49,6 +38,7 @@ public class TestHelper {
         new WebDriverWait(driver, waitForResposeTime).until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
     }
 
+    // Method to verify if an element is present
     public boolean isElementPresent(By by) {
         try {
             driver.findElement(by);
@@ -58,41 +48,34 @@ public class TestHelper {
         }
     }
 
+    // Method to login
     void login(String username, String password) {
-
         driver.get(baseUrlAdmin);
-
         goToPage("Login");
-
         driver.findElement(By.id("name")).sendKeys(username);
-
         driver.findElement(By.id("password")).sendKeys(password);
-
         By loginButtonXpath = By.xpath("//input[@value='Login']");
-
         driver.findElement(loginButtonXpath).click();
     }
 
+    // Method to register
     void register(String username, String password) {
         driver.get(baseUrlAdmin);
-
         goToPage("Register");
-
         driver.findElement(By.id("user_name")).sendKeys(username);
-
         driver.findElement(By.id("user_password")).sendKeys(password);
-
         driver.findElement(By.id("user_password_confirmation")).sendKeys(password);
-
         driver.findElement(By.name("commit")).click();
     }
 
+    // Method to logout
     void logout() {
         WebElement logout = driver.findElement(By.linkText("Logout"));
         logout.click();
         waitForElementById("Admin");
     }
 
+    // Method to delete an account
     void deleteAccount(String username) {
         driver.get(baseUrlUsers);
         WebElement deleteBody = driver.findElement(By.tagName("tbody"));
@@ -108,6 +91,7 @@ public class TestHelper {
         }
     }
 
+    // Method to add products
     void addProductshelp(String title, String description, String type, String price) {
         driver.get(baseUrlProducts);
         driver.findElement(By.linkText("New product")).click();
@@ -120,6 +104,7 @@ public class TestHelper {
         driver.findElement(By.name("commit")).click();
     }
 
+    // Method to edit products
     void editProducthelp(String title, String newTitle, String newDescription, String newType, String newPrice) {
         driver.get(baseUrlProducts);
         WebElement row = driver.findElement(By.xpath("//tr[td/a[text()='" + title + "']]"));
@@ -136,17 +121,20 @@ public class TestHelper {
         driver.findElement(By.name("commit")).click();
     }
 
+    // Method to delete products
     void deleteProduct(String title) {
         driver.get(baseUrlProducts);
         WebElement row = driver.findElement(By.xpath("//tr[td/a[text()='" + title + "']]"));
         row.findElement(By.xpath(".//a[contains(text(), 'Delete')]")).click();
     }
 
+    // Method to find a product
     boolean findProduct(String title) {
         driver.get(baseUrlProducts);
         return isElementPresent(By.linkText(title));
     }
 
+    // Method to add to cart
     void addToCart(String title) {
         driver.get(baseUrl);
         WebElement div = driver.findElement(By.id(title + "_entry"));
@@ -154,6 +142,7 @@ public class TestHelper {
         form.submit();
     }
 
+    // Method to get quantity
     String getQuantity(String title) {
         driver.get(baseUrl);
         List<WebElement> rows = driver.findElements(By.cssSelector("tbody .cart_row"));
@@ -166,6 +155,7 @@ public class TestHelper {
         return null;
     }
 
+    // Method to decrease quantity
     void decreaseQuantity(String title) {
         driver.get(baseUrl);
         List<WebElement> rows = driver.findElements(By.cssSelector("tbody .cart_row"));
@@ -179,6 +169,7 @@ public class TestHelper {
         }
     }
 
+    // Method to increase quantity
     void increaseQuantity(String title) {
         driver.get(baseUrl);
         List<WebElement> rows = driver.findElements(By.cssSelector("tbody .cart_row"));
@@ -192,6 +183,7 @@ public class TestHelper {
         }
     }
 
+    // Method to delete item
     void deleteItem(String title) {
         driver.get(baseUrl);
         List<WebElement> rows = driver.findElements(By.cssSelector("tbody .cart_row"));
@@ -205,18 +197,21 @@ public class TestHelper {
         }
     }
 
+    // Method to get cart length
     int getCartLength() {
         driver.get(baseUrl);
         List<WebElement> rows = driver.findElements(By.cssSelector("tbody .cart_row"));
         return rows.size();
     }
 
+    // Method to empty cart
     void emptyCart() {
         driver.get(baseUrl);
         WebElement emptyCartForm = driver.findElement(By.cssSelector("form.button_to"));
         emptyCartForm.submit();
     }
 
+    // Method to checkout with name, address, email, and pay type
     void checkout(String name, String address, String email, String payType) {
         driver.get(baseUrl);
         WebElement checkoutButton = driver.findElement(By.cssSelector("form#checkout_button"));
@@ -230,6 +225,7 @@ public class TestHelper {
         driver.findElement(By.name("commit")).click();
     }
 
+    // Method to search
     void search(String query) {
         driver.get(baseUrl);
         WebElement searchInput = driver.findElement(By.id("search_input"));
@@ -237,6 +233,7 @@ public class TestHelper {
         searchInput.sendKeys(query);
     }
 
+    // Method to iterate over items and check if they contain the query
     boolean iterOverItems(String query) {
         List<WebElement> items = driver.findElements(By.cssSelector("div.entry"));
         for (WebElement item : items) {
@@ -249,6 +246,7 @@ public class TestHelper {
         return true;
     }
 
+    // Method to check categories of items
     boolean checkCategories(String category) {
         List<WebElement> items = driver.findElements(By.cssSelector("div.entry"));
         for (WebElement item : items) {
