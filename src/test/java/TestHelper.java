@@ -10,6 +10,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This work is done by:
+ * C14544 Ralf Animägi ralfanimagi@gmail.com
+ * B911205 Elisabet Hein elisabet.hein@ut.ee
+ */
 public class TestHelper {
 
     static WebDriver driver;

@@ -6,6 +6,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static junit.framework.TestCase.*;
 
+/**
+ * This work is done by:
+ * C14544 Ralf Animägi ralfanimagi@gmail.com
+ * B911205 Elisabet Hein elisabet.hein@ut.ee
+ */
 public class BasicTest extends TestHelper {
 
 
