@@ -12,6 +12,7 @@ public class BasicTest extends TestHelper {
     private String username = "123";
     private String password = "123";
 
+    // Verify that the title of the page is "ST Online Store"
     @Test
     public void titleExistsTest() {
         String expectedTitle = "ST Online Store";
@@ -19,6 +20,7 @@ public class BasicTest extends TestHelper {
         assertEquals(expectedTitle, actualTitle);
     }
 
+    // Verify that user can log in and log out successfully
     @Test
     public void loginLogoutTest() {
         login(username, password);
@@ -28,7 +30,7 @@ public class BasicTest extends TestHelper {
         logout();
     }
 
-
+    // Verify that logging in with false password displays an error message
     @Test
     public void loginFalsePassword() {
         login(username, "1234");
@@ -36,14 +38,31 @@ public class BasicTest extends TestHelper {
         assertEquals("Invalid user/password combination", error.getText());
     }
 
+    // Verify that user can register successfully (erasing data after)
     @Test
-    public void registerAndDeleteAnAccount() {
+    public void registerAnAccount() {
         register("test", "test");
         WebElement notice = driver.findElement(By.id("notice"));
         assertEquals("User test was successfully created.", notice.getText());
         deleteAccount("test");
     }
 
+    // Negative test 1: Verify we cannot create a user with missing input
+    @Test
+    public void registerAnAccountWithMissingField(){
+        register("222", "");
+        assertTrue(isElementPresent(By.id("error_explanation")));
+    }
+    // Verify that user can be deleted successfully
+    @Test
+    public void deleteAnAccount() {
+        register("test", "test");
+        deleteAccount("test");
+        WebElement notice = driver.findElement(By.id("notice"));
+        assertEquals("User was successfully deleted.", notice.getText());
+    }
+
+    // Verify that products can be added under the category "Books"
     @Test
     public void addProductsBooks() {
         login(username, password);
@@ -52,6 +71,7 @@ public class BasicTest extends TestHelper {
         deleteProduct("Test Product");
     }
 
+    // Verify that products can be added under the category "Sunglasses"
     @Test
     public void addProductsSunglasses() {
         login(username, password);
@@ -60,6 +80,7 @@ public class BasicTest extends TestHelper {
         deleteProduct("Test Product 2");
     }
 
+    // Verify that products can be added under the category "Other"
     @Test
     public void addProductsOther() {
         login(username, password);
@@ -68,6 +89,7 @@ public class BasicTest extends TestHelper {
         deleteProduct("Test Product 3");
     }
 
+    // Negative test 2: Verify that adding a product with a negative price displays an error message
     @Test
     public void addProductsNegativePrice() {
         login(username, password);
@@ -76,6 +98,7 @@ public class BasicTest extends TestHelper {
         assertNotNull(error);
     }
 
+    // Negative test 3: Verify that adding an already existing product displays an error message
     @Test
     public void addAlreadyExistingProduct() {
         login(username, password);
@@ -86,6 +109,7 @@ public class BasicTest extends TestHelper {
         deleteProduct("Test Product Existing");
     }
 
+    // Negative test 4: Verify that adding a product with empty fields displays an error message
     @Test
     public void addProductsWithEmptyFields() {
         login(username, password);
@@ -94,6 +118,7 @@ public class BasicTest extends TestHelper {
         assertNotNull(error);
     }
 
+    // Verify that a product can be edited successfully
     @Test
     public void editProduct() {
         login(username, password);
@@ -103,6 +128,7 @@ public class BasicTest extends TestHelper {
         deleteProduct("Test Product 6");
     }
 
+    // Verify that a product can be deleted successfully
     @Test
     public void deleteProduct() {
         login(username, password);
@@ -111,7 +137,7 @@ public class BasicTest extends TestHelper {
         assertFalse(findProduct("Test Product 7"));
     }
 
-    // FAIL 1 - too large price
+    // FAIL 1 - Verify that adding a product with a large price still adds the product
     @Test
     public void addProductLargePrice() {
         login(username, password);
@@ -120,12 +146,14 @@ public class BasicTest extends TestHelper {
     }
 
     // End User tests
+    // Verify that products can be added to the cart
     @Test
     public void addProductsToCart() {
         addToCart("B45593 Sunglasses");
         assertTrue(isElementPresent(By.id("checkout_button")));
     }
 
+    // Verify that the quantity of a product can be increased in the cart
     @Test
     public void increaseProductQuantity() {
         addToCart("B45593 Sunglasses");
@@ -133,6 +161,7 @@ public class BasicTest extends TestHelper {
         assertEquals(getQuantity("B45593 Sunglasses"), "2×");
     }
 
+    // Verify that the quantity of a product can be decreased in the cart
     @Test
     public void decreaseProductQuantity() {
         addToCart("B45593 Sunglasses");
@@ -142,6 +171,7 @@ public class BasicTest extends TestHelper {
         assertEquals(getQuantity("B45593 Sunglasses"), "2×");
     }
 
+    // Verify that a product can be deleted from the cart
     @Test
     public void deleteProductFromCart() {
         addToCart("B45593 Sunglasses");
@@ -149,6 +179,7 @@ public class BasicTest extends TestHelper {
         assertFalse(isElementPresent(By.id("checkout_button")));
     }
 
+    // Verify that multiple products can be deleted from the cart
     @Test
     public void deleteMultipleProductFromCart() {
         addToCart("B45593 Sunglasses");
@@ -157,6 +188,7 @@ public class BasicTest extends TestHelper {
         assertEquals(getCartLength(), 1);
     }
 
+    // Verify that the cart can be emptied successfully
     @Test
     public void deleteCart() {
         addToCart("B45593 Sunglasses");
@@ -166,6 +198,7 @@ public class BasicTest extends TestHelper {
         assertEquals("Cart successfully deleted.", notice.getText());
     }
 
+    // FAIL 2: Verify that items can be purchased successfully with correct price
     @Test
     public void purchaseItems() {
         addToCart("B45593 Sunglasses");
@@ -174,36 +207,39 @@ public class BasicTest extends TestHelper {
         assertEquals(driver.findElement(By.className("total_cell")).getText(), "€52.00");
     }
 
+    // Negative test 5: Verify that items cannot be purchased with missing fields
     @Test
     public void purchaseItemsWithMissingFields() {
         addToCart("B45593 Sunglasses");
-        checkout("", "", "email.com", "Credit card");
+        checkout("", "", "", "Credit card");
         assertTrue(isElementPresent(By.id("error_explanation")));
     }
 
+    // Verify that search functionality works correctly
     @Test
     public void search() {
         search("sun");
         assertTrue(iterOverItems("sun"));
     }
 
+    // Verify that selecting the category "Books" displays books
     @Test
     public void selectBooks() {
         goToPage("Books");
         assertTrue(checkCategories("Books"));
     }
 
+    // Verify that selecting the category "Sunglasses" displays sunglasses
     @Test
     public void selectSunglasses() {
         goToPage("Sunglasses");
         assertTrue(checkCategories("Sunglasses"));
     }
 
+    // FAIL 3: Verify that selecting the category "Other" displays other products
     @Test
     public void selectOther() {
         goToPage("Other");
         assertTrue(checkCategories("Other"));
     }
-
-
 }
